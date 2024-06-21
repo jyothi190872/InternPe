@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e0f7fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 350px;
+        }
+        h1 {
+            text-align: center;
+            color: #00796b;
+        }
+        #new-task-form {
+            display: flex;
+            justify-content: space-between;
+        }
+        #new-task-form input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #00796b;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        #new-task-form button {
+            padding: 10px 15px;
+            border: none;
+            background: #00796b;
+            color: #ffffff;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            background: #b2dfdb;
+            margin: 10px 0;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 5px;
+        }
+        li.completed {
+            text-decoration: line-through;
+            color: #757575;
+        }
+        .remove {
+            background: #e64a19;
+            color: #ffffff;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>To-Do List</h1>
+        <form id="new-task-form">
+            <input type="text" id="new-task-input" placeholder="Add a new task">
+            <button type="submit">Add</button>
+        </form>
+        <ul id="tasks"></ul>
+    </div>
+
+    <script>
+        document.getElementById('new-task-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const taskInput = document.getElementById('new-task-input');
+            const taskText = taskInput.value.trim();
+            if (taskText === '') {
+                alert('Please enter a task');
+                return;
+            }
+            addTask(taskText);
+            taskInput.value = '';
+        });
+
+        function addTask(taskText) {
+            const taskList = document.getElementById('tasks');
+
+            const taskItem = document.createElement('li');
+            const taskContent = document.createElement('span');
+            taskContent.textContent = taskText;
+
+            const removeButton = document.createElement('button');
+            removeButton.textContent = 'Remove';
+            removeButton.classList.add('remove');
+            removeButton.addEventListener('click', function() {
+                taskList.removeChild(taskItem);
+            });
+
+            taskItem.appendChild(taskContent);
+            taskItem.appendChild(removeButton);
+
+            taskItem.addEventListener('click', function() {
+                taskItem.classList.toggle('completed');
+            });
+
+            taskList.appendChild(taskItem);
+        }
+    </script>
+</body>
+</html>
+

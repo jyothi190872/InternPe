@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>E-commerce Website</title>
+  <style>
+    /* CSS Styles */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    
+    header {
+      background-color: #333;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+    }
+    
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    
+    nav li {
+      display: inline-block;
+      margin-right: 20px;
+    }
+    
+    nav a {
+      color: #fff;
+      text-decoration: none;
+    }
+    
+    main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+    
+    section {
+      background-color: #f7f7f7;
+      padding: 20px;
+      border: 1px solid #ddd;
+      margin-bottom: 20px;
+    }
+    
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-gap: 20px;
+    }
+    
+    .product {
+      background-color: #fff;
+      padding: 20px;
+      border: 1px solid #ddd;
+    }
+    
+    .product img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+    
+    .product h3 {
+      margin-top: 0;
+    }
+    
+    .product p {
+      margin-bottom: 10px;
+    }
+    
+    .add-to-cart {
+      background-color: #4CAF50;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    
+    .add-to-cart:hover {
+      background-color: #3e8e41;
+    }
+    
+    footer {
+      background-color: #333;
+      color: #fff;
+      padding: 10px;
+      text-align: center;
+    }
+    
+    @media only screen and (max-width: 768px) {
+      .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    @media only screen and (max-width: 480px) {
+      .product-grid {
+        grid-template-columns: repeat(1, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <ul>
+        <li><a href="#featured-products">Featured Products</a></li>
+        <li><a href="#product-grid">Product Grid</a></li>
+        <li><a href="#cart">Cart</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main id="main">
+    <h1>Welcome to our e-commerce website!</h1>
+    <section id="featured-products">
+      <h2>Featured Products</h2>
+      <div class="product-grid">
+        <!-- Product 1 -->
+        <div class="product">
+          <img src="product1.jpg" alt="Product 1" width="100%" height="150px">
+          <h3>Product 1</h3>
+          <p>$19.99</p>
+          <button class="add-to-cart">Add to Cart</button>
+        </div>
+        <!-- Product 2 -->
+        <div class="product">
+          <img src="product2.jpg" alt="Product 2" width="100%" height="150px">
+          <h3>Product 2</h3>
+          <p>$29.99</p>
+          <button class="add-to-cart">Add to Cart</button>
+        </div>
+        <!-- Product 3 -->
+        <div class="product">
+          <img src="product3.jpg" alt="Product 3" width="100%" height="150px">
+          <h3>Product 3</h3>
+          <p>$39.99</p>
+          <button class="add-to-cart">Add to Cart</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cart section -->
+    <section id="cart">
+      <h2>Cart</h2>
+      <ul id="cart-list"></ul>
+      <p id="cart-total">$0.00</p>
+      <button id="checkout" disabled>Checkout</button>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <p>&copy; E-commerce Website - All rights reserved.</p>
+      <a href="#top" id="back-to-top">Back to Top</a>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+      let cart = [];
+
+      // Add event listener to add-to-cart buttons
+      document.querySelectorAll('.add-to-cart').forEach((button) => {
+        button.addEventListener('click', (event) => {
+          const product = event.target.closest('.product');
+          const productName = product.querySelector('h3').textContent.trim();
+          const productPrice = parseFloat(product.querySelector('p').textContent.replace(/\$|,/g, ''));
+
+          // Check if cart is empty
+          if (!cart.length) {
+            cart.push({ name: productName, price: productPrice, quantity: 1 });
+          } else {
+            // Check if item already in cart
+            const existingItem = cart.find((item) => item.name === productName);
+            if (existingItem) {
+              existingItem.quantity++;
+            } else {
+              cart.push({ name: productName, price: productPrice, quantity: 1 });
+            }
+          }
+
+          // Update cart list and total
+          const cartList = document.getElementById('cart-list');
+          cartList.innerHTML = '';
+          cart.forEach((item) => {
+            const listItem = document.createElement('li');
+            listItem.textContent = `${item.name} - $${item.price} x ${item.quantity}`;
+            cartList.appendChild(listItem);
+          });
+
+          const cartTotal = document.getElementById('cart-total');
+          cartTotal.textContent = `Total: $${getCartTotal().toFixed(2)}`;
+
+          // Update checkout button
+          const checkoutButton = document.getElementById('checkout');
+          checkoutButton.disabled = !cart.length;
+        });
+      });
+
+      // Get cart total
+      function getCartTotal() {
+        let total = 0;
+        cart.forEach((item) => {
+          total += item.price * item.quantity;
+        });
+        return total.toFixed(2);
+      }
+
+      // Add event listener to checkout button
+      document.getElementById('checkout').addEventListener('click', (event) => {
+        console.log('Checkout button clicked!');
+      });
+
+      // Add event listener to back to top button
+      document.getElementById('back-to-top').addEventListener('click', (event) => {
+        console.log('Back to top button clicked!');
+      });
+    </script>
+  </main>
+</body>
+</html>
+
+
